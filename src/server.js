@@ -20,7 +20,7 @@ app.get('/notes', (req, res) => {
   });
 });
 
-app.get('/notes/:id', (req, res) => {
+app.get('/notes/:noteId', (req, res) => {
   res.json({
     message: 'Retrieved note with ID: id_param',
   });
