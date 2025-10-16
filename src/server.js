@@ -21,8 +21,9 @@ app.get('/notes', (req, res) => {
 });
 
 app.get('/notes/:noteId', (req, res) => {
+  const { noteId } = req.params;
   res.json({
-    message: 'Retrieved note with ID: id_param',
+    message: `Retrieved note with ID: ${noteId}`,
   });
 });
 
@@ -44,4 +45,4 @@ app.use((error, req, res, next) => {
 
 const port = Number(process.env.PORT) || 3000;
 
-app.listen(port, () => console.log(`Server is running at 3000 port`));
+app.listen(port, () => console.log(`Server is running at ${port} port`));
