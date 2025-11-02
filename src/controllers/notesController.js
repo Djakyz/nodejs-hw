@@ -3,8 +3,35 @@ import { Note } from '../models/note.js';
 
 // Get all notes
 export const getAllNotes = async (req, res) => {
-  const result = await Note.find();
-  res.json(result);
+  const { page = 1, perPage = 10, tag, search } = req.query;
+
+  const pageNum = Number(page);
+  const perPageNum = Number(perPage);
+  const filter = {};
+
+  if (tag) {
+    filter.tag = tag;
+  }
+
+  if (typeof search === 'string' && search.trim().length > 0) {
+    filter.$text = { $search: search.trim() };
+  }
+
+  const totalNotes = await Note.countDocuments(filter);
+  const notes = await Note.find(filter)
+    .sort({ createdAt: -1 })
+    .skip((pageNum - 1) * perPageNum)
+    .limit(perPageNum);
+
+  const totalPages = Math.ceil(totalNotes / perPageNum) || 1;
+
+  return res.status(200).json({
+    page: pageNum,
+    perPage: perPageNum,
+    totalNotes,
+    totalPages,
+    notes,
+  });
 };
 
 // Get note by ID
