@@ -15,8 +15,11 @@ import {
   createNoteSchema,
   updateNoteSchema,
 } from '../validations/notesValidation.js';
+import { authenticate } from '../middleware/authenticate.js';
 
 const notesRoutes = Router();
+
+notesRoutes.use('/notes', authenticate);
 
 notesRoutes.get('/notes', celebrate(getAllNotesSchema), getAllNotes);
 
